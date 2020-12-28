@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sales Representative</title>
+        <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    </head>
+    <body class="bg-info">
+        <div class="container text-center">
+            <div class="mt-5 col-md-12"></div>
+            <table class="table table-striped table-light table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Client ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="client:${client}">
+                        <td th:text="${client.id}">Client Id</td>
+                        <td th:text="${client.name}">Client Username</td>
+                        <td th:text="${client.mail}">Client Email</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

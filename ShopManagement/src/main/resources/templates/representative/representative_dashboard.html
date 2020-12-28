@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sales Representative Dashboard</title>
+        <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+        <script>
+            function getClientById() {
+                var x = document.getElementById("clientId").value;
+                window.location.href = "/representative/api/v1/getClientById/" + x;
+            };
+            function deleteClientById() {
+                var x = document.getElementById("delClientId").value;
+                window.location.href = "/representative/api/v1/deleteClient/" + x;
+            };
+            function getMySales(){
+                 var x = document.getElementById("id").value;
+                window.location.href = "/representative/api/v1/getSales/" + x;
+            }
+        </script>
+        <style>
+            .card{
+                background-color: rgb(219, 214, 206);
+                border: 2px solid black;
+            }
+            hr{
+             height:3px;
+             border:none;
+             color:#333;
+             background-color:#333;
+            }
+            h2{
+                color:white
+            }
+        </style>
+    </head>
+    <body class="bg-info">
+        <div class="container text-center">
+            <div>
+                <div class="mt-5 col-md-12"></div>
+                <div>
+                    <h1>Logged in as <b>[[${#request.userPrincipal.principal.username}]]</b></h1>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <h3><a style="color:white" href="logout">Logout</a></h3>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Client Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allClients}">All Clients</a></h3>
+                            <h3><a th:href="@{v1/newClient}">New Client</a></h3>
+                            <h3><a th:href="@{v1/updateClient}">Update Client</a></h3>
+                            <h5>
+                                Get Client by ID: <input type="text" id="clientId">
+                                <button onclick="getClientById()">Get Client</button>
+                            </h5>
+                            </br>
+                            <h5>
+                                Delete Client by ID: <input type="text" id="delClientId">
+                                <button onclick="deleteClientById()">Delete</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Product Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allProducts}">All Products</a></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Sales Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/getSales}">My Sales</a></h3>
+                            <h3><a th:href="@{v1/newSale}">New Sale</a></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Email Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/sendMail}">Send Mail To All Clients</a></h3>
+                            <h3><a th:href="@{v1/sendMailToClient}">Send Mail To One Client</a></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+            </div>
+        </div>
+    </body>
+</html>

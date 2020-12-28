@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Representative Login</title>
+        <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+        <style>
+            .card{
+                background-color: rgb(219, 214, 206);
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body class="bg-info">
+        <div class="container text-center">
+            <div>
+                <div class="mt-5 col-md-12"></div>
+                <div class=>
+                    <h1>Sales Representative Login</h1>
+                </div>
+                <hr style="height:3px;border:none;color:#333;background-color:#333;" >
+                <div class="mt-5 col-md-12"></div>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 25rem;">
+                        <div class="card-body">
+                            <h5>
+                                <form method="POST" action="/representative/login">
+                                    Username : <input type="text" name="username"/><br><br>
+                                    Password  : <input type="password" name="password"/><br><br>
+                                    <input type="submit" name="submit" value="Login"/>
+                                </form>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

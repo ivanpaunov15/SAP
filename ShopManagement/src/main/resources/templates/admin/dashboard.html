@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <style>
+            .card{
+                background-color: rgb(219, 214, 206);
+                border: 2px solid black;
+            }
+            hr{
+             height:3px;
+             border:none;
+             color:#333;
+             background-color:#333;
+            }
+            h2{
+                color:white
+            }
+        </style>
+    <script>
+        function getAdminById() {
+            var x = document.getElementById("adminId").value;
+            window.location.href = "/admin/api/v1/getAdminById/" + x;
+        };
+         function getRepresentativeById() {
+            var x = document.getElementById("representativeId").value;
+            window.location.href = "/admin/api/v1/getSalesRepresentativeById/" + x;
+        };
+        function getProductById() {
+            var x = document.getElementById("productId").value;
+            window.location.href = "/admin/api/v1/getProductById/" + x;
+        };
+        function getSaleById() {
+            var x = document.getElementById("saleId").value;
+            window.location.href = "/admin/api/v1/getSaleById/" + x;
+        };
+        function getSaleByDate() {
+            var x = document.getElementById("date1").value;
+            var y = document.getElementById("date2").value;
+            window.location.href = "/admin/api/v1/getSaleBetweenPeriod/" + x + "/" + y;
+        };
+        function getSaleByRepresentativeId() {
+            var x = document.getElementById("saleRepresentativeId").value;
+            window.location.href = "/admin/api/v1/getSaleByRepresentativeId/" + x;
+        };
+        function getClientSales() {
+            var x = document.getElementById("clientId").value;
+            window.location.href = "/admin/api/v1/getSalesOfClient/" + x;
+        };
+        function deleteRepresentativeById() {
+            var x = document.getElementById("delRepresentativeId").value;
+            window.location.href = "/admin/api/v1/deleteSalesRepresentative/" + x;
+        };
+        function deleteProductById() {
+            var x = document.getElementById("delProductId").value;
+            window.location.href = "/admin/api/v1/deleteProduct/" + x;
+        };
+    </script>
+</head>
+    <body class="bg-info">
+        <div class="container text-center">
+            <div>
+                <div class="mt-5 col-md-12"></div>
+                <div>
+                    <h1>Logged in as <b>[[${#request.userPrincipal.principal.username}]]</b></h1>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <h3><a style="color:white" href="logout">Logout</a></h3>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Admin Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allAdmins}">All Admins</a></h3>
+                            <h3><a th:href="@{v1/newAdmin}">New Admin</a></h3>
+                            <h5>
+                                Get Admin by ID: <input type="text" id="adminId">
+                                <button onclick="getAdminById()">Get Admin</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Sales Representative Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allSalesRepresentatives}">All Sales Representatives</a></h3>
+                            <h3><a th:href="@{v1/newSalesRepresentative}">New Sales Representative</a></h3>
+                            <h3><a th:href="@{v1/updateSalesRepresentative}">Update Sales Representative</a></h3>
+                            <h5>
+                                Get Sales Representative by ID: <input type="text" id="representativeId"><span> </span><button onclick="getRepresentativeById()">Get Sales Representative</button>
+                            </h5>
+                            </br><br>
+                            <h5>
+                                Delete Sales Representative by ID: <input type="text" id="delRepresentativeId">
+                                <button onclick="deleteRepresentativeById()">Delete</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Product Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allProducts}">All Products</a></h3>
+                            <h3><a th:href="@{v1/newProduct}">New Product</a></h3>
+                            <h3><a th:href="@{v1/updateProduct}">Update Product</a></h3>
+                            <h5>
+                                Get Product by ID: <input type="text" id="productId">
+                                <button onclick="getProductById()">Get Product</button>
+                            </h5>
+                            </br><br>
+                            <h5>
+                                Delete Product by ID: <input type="text" id="delProductId">
+                                <button onclick="deleteProductById()">Delete</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+                <hr>
+                <div class="mt-5 col-md-12"></div>
+                <h2>Sales Options</h2>
+                <div class = "row justify-content-center">
+                    <div class="card" style="width: 80rem;">
+                        <div class="card-body">
+                            <h3><a th:href="@{v1/allSales}">All Sales</a></h3>
+                            <h5>
+                                Get Sale by ID: <input type="text" id="saleId">
+                                <button onclick="getSaleById()">Get Sale</button>
+                            </h5>
+                            </br><br>
+                            <h5>
+                                Get Client Sales by Name of Client: <input type="text" id="clientId">
+                                <button onclick="getClientSales()">Get Sales</button>
+                            </h5>
+                            </br><br>
+                            <h5>
+                                Get Sales by Sales Representative ID: <input type="text" id="saleRepresentativeId">
+                                <button onclick="getSaleByRepresentativeId()">Get Sales</button>
+                            </h5>
+                            </br><br>
+                            <h5>
+                                Get Sales between two dates:
+
+                                </br><br>
+                                <input type="text" id="date1" value="YYYY-MM-DD">
+                                <input type="text" id="date2" value="YYYY-MM-DD">
+                                <button onclick="getSaleByDate()">Get Sales</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 col-md-12"></div>
+            </div>
+        </div>
+    </body>
+</html>

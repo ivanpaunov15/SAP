@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin</title>
+        <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+        <script
+                src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script type="text/javascript"
+                src="https://www.gstatic.com/charts/loader.js"></script>
+        <script th:inline="javascript">
+        var real_data = /*[[${chartData}]]*/'noValue';
+
+        $(document).ready(function() {
+            google.charts.load('current', {
+                packages : [ 'corechart', 'bar' ]
+            });
+            google.charts.setOnLoadCallback(drawPieChart);
+        });
+
+
+        function drawPieChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Product');
+            data.addColumn('number', 'Quantity');
+            Object.keys(real_data).forEach(function(key) {
+                data.addRow([ key, real_data[key] ]);
+            });
+            var options = {
+                title : 'Sales Stats',
+                is3D: true,
+            };
+            var chart = new google.visualization.PieChart(document
+                    .getElementById('piechart_3d'));
+            chart.draw(data, options);
+        }
+    </script>
+        <style>
+            .pie,.card{
+                display: inline-block;
+                background-color: rgb(219, 214, 206);
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body class="bg-info">
+        <div class="container text-center">
+            <div class="mt-5 col-md-12"></div>
+            <div class="pie">
+                <div  id="piechart_3d" style="width: 500px; height: 500px;"></div>
+            </div>
+            <div class="pull-right">
+                <div class="card" style="width: 40rem;">
+                    <div class="card-body">
+                        <h4>Income from all sales: <b><span th:text="${allMoney}">Income</span></b></h4>
+                        <hr>
+                        <h5>Best Sale ID: <b><span th:text="${bestSale.id}">Sale</span></b></h5>
+                        <h5>Product: <b><span th:text="${bestSale.product}">Sale</span></b></h5>
+                        <h5>Price: <b><span th:text="${bestSale.price}">Price</span></b></h5>
+                        <h5>Quantity: <b><span th:text="${bestSale.quantity}">Quantity</span></b></h5>
+                        <h5>Sales Representative: <b><span th:text="${bestSale.salesRepresentative}">Representative</span></b></h5>
+                        <h5>Client: <b><span th:text="${bestSale.client}">Client</span></b></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 col-md-12"></div>
+            <table class="table table-striped table-light table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>ID Representative</th>
+                        <th>Representative</th>
+                        <th>Client</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="sale:${sale}">
+                        <td th:text="${sale.id}">ID</td>
+                        <td th:text="${sale.salesRepresentativeID}">ID Representative</td>
+                        <td th:text="${sale.salesRepresentative}">Representative</td>
+                        <td th:text="${sale.client}">Client</td>
+                        <td th:text="${sale.product}">Product</td>
+                        <td th:text="${sale.price}">Price</td>
+                        <td th:text="${sale.quantity}">Quantity</td>
+                        <td th:text="${#calendars.format(sale.date,'yyyy-MM-dd')}">Date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
