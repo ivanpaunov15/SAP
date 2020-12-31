@@ -6,7 +6,6 @@ import com.ivan.ShopManagement.model.Sale;
 import com.ivan.ShopManagement.model.SalesRepresentative;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 

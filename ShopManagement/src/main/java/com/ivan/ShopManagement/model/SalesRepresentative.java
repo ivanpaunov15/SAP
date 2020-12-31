@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class SalesRepresentative implements User{
     @Id
     @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotEmpty

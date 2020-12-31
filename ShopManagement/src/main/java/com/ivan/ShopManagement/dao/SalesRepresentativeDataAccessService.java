@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.ivan.ShopManagement.services.MailService;
+import javafx.scene.chart.PieChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -89,6 +90,9 @@ public class SalesRepresentativeDataAccessService implements SalesRepresentative
                 pieChart.setId(pieChart.getId());
                 pieChart.setQuantity(pieChart.getQuantity()+quantity);
                 statisticsRepository.save(pieChart);
+            }
+            else {
+                statisticsRepository.save(new Statistics(product.getName(),quantity));
             }
             if(product.getQuantity()<10){
                 List<Administrator> administrators = adminRepository.findAll();

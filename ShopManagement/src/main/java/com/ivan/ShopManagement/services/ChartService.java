@@ -7,10 +7,7 @@ import com.ivan.ShopManagement.model.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class ChartService {
@@ -35,11 +32,15 @@ public class ChartService {
         List<Sale> saleList = saleRepository.getAllSalesOfClient(name);
         List<Statistics> pieChartList = new ArrayList<>();
         int index = 0;
+        int quantity = 0;
         for(Sale sale:saleList){
             Statistics item = new Statistics(sale.getProduct(),sale.getQuantity());
-            if(pieChartList.contains(item)){
-                index = pieChartList.indexOf(item);
-                pieChartList.get(index).setQuantity(pieChartList.get(index).getQuantity()+sale.getQuantity());
+            if(pieChartList.stream().anyMatch(x->x.getProduct().equals(item.getProduct()))){
+                Statistics temp = pieChartList.stream().filter(x->x.getProduct().equals(item.getProduct())).findAny().orElse(null);
+                quantity = temp.getQuantity();
+                pieChartList.remove(temp);
+                item.setQuantity(item.getQuantity()+quantity);
+                pieChartList.add(item);
             }
             else{
                 pieChartList.add(item);
@@ -56,11 +57,15 @@ public class ChartService {
         List<Sale> saleList = saleRepository.getAllSalesByRepresentativeId(id);
         List<Statistics> pieChartList = new ArrayList<>();
         int index = 0;
+        int quantity = 0;
         for(Sale sale:saleList){
             Statistics item = new Statistics(sale.getProduct(),sale.getQuantity());
-            if(pieChartList.contains(item)){
-                index = pieChartList.indexOf(item);
-                pieChartList.get(index).setQuantity(pieChartList.get(index).getQuantity()+sale.getQuantity());
+            if(pieChartList.stream().anyMatch(x->x.getProduct().equals(item.getProduct()))){
+                Statistics temp = pieChartList.stream().filter(x->x.getProduct().equals(item.getProduct())).findAny().orElse(null);
+                quantity = temp.getQuantity();
+                pieChartList.remove(temp);
+                item.setQuantity(item.getQuantity()+quantity);
+                pieChartList.add(item);
             }
             else{
                 pieChartList.add(item);
@@ -77,11 +82,15 @@ public class ChartService {
         List<Sale> saleList = saleRepository.getAllSalesBetweenPeriod(firstDate,secondDate);
         List<Statistics> pieChartList = new ArrayList<>();
         int index = 0;
+        int quantity = 0;
         for(Sale sale:saleList){
             Statistics item = new Statistics(sale.getProduct(),sale.getQuantity());
-            if(pieChartList.contains(item)){
-                index = pieChartList.indexOf(item);
-                pieChartList.get(index).setQuantity(pieChartList.get(index).getQuantity()+sale.getQuantity());
+            if(pieChartList.stream().anyMatch(x->x.getProduct().equals(item.getProduct()))){
+                Statistics temp = pieChartList.stream().filter(x->x.getProduct().equals(item.getProduct())).findAny().orElse(null);
+                quantity = temp.getQuantity();
+                pieChartList.remove(temp);
+                item.setQuantity(item.getQuantity()+quantity);
+                pieChartList.add(item);
             }
             else{
                 pieChartList.add(item);
@@ -98,11 +107,15 @@ public class ChartService {
         List<Sale> saleList = saleRepository.getAllSalesByRepresentativeName(name);
         List<Statistics> pieChartList = new ArrayList<>();
         int index = 0;
+        int quantity = 0;
         for(Sale sale:saleList){
             Statistics item = new Statistics(sale.getProduct(),sale.getQuantity());
-            if(pieChartList.contains(item)){
-                index = pieChartList.indexOf(item);
-                pieChartList.get(index).setQuantity(pieChartList.get(index).getQuantity()+sale.getQuantity());
+            if(pieChartList.stream().anyMatch(x->x.getProduct().equals(item.getProduct()))){
+                Statistics temp = pieChartList.stream().filter(x->x.getProduct().equals(item.getProduct())).findAny().orElse(null);
+                quantity = temp.getQuantity();
+                pieChartList.remove(temp);
+                item.setQuantity(item.getQuantity()+quantity);
+                pieChartList.add(item);
             }
             else{
                 pieChartList.add(item);

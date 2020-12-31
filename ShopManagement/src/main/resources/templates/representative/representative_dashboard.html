@@ -5,17 +5,31 @@
         <title>Sales Representative Dashboard</title>
         <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
         <script>
+            function required(text){
+             if (text.length == 0)
+              {
+                 alert("Empty input field");
+                 return false;
+              }
+              return true;
+            }
             function getClientById() {
                 var x = document.getElementById("clientId").value;
-                window.location.href = "/representative/api/v1/getClientById/" + x;
+                if(required(x)){
+                    window.location.href = "/representative/api/v1/getClientById/" + x;
+                }
             };
             function deleteClientById() {
                 var x = document.getElementById("delClientId").value;
-                window.location.href = "/representative/api/v1/deleteClient/" + x;
+                if(required(x)){
+                    window.location.href = "/representative/api/v1/deleteClient/" + x;
+                }
             };
             function getMySales(){
-                 var x = document.getElementById("id").value;
-                window.location.href = "/representative/api/v1/getSales/" + x;
+                var x = document.getElementById("id").value;
+                if(required(x)){
+                    window.location.href = "/representative/api/v1/getSales/" + x;
+                }
             }
         </script>
         <style>

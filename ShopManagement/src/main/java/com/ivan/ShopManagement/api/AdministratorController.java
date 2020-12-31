@@ -12,12 +12,12 @@ import java.util.Map;
 
 import com.ivan.ShopManagement.services.ChartService;
 import com.ivan.ShopManagement.services.StatsServices;
+import com.ivan.ShopManagement.services.ValidationServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.security.RolesAllowed;
 
 @RequestMapping({"admin/api/v1/"})
 @RestController
@@ -29,6 +29,9 @@ public class AdministratorController {
 
     @Autowired
     StatsServices statsServices;
+
+    @Autowired
+    ValidationServices validationServices;
 
     @Autowired
     public AdministratorController(AdministratorServices administratorServices) {
@@ -64,6 +67,8 @@ public class AdministratorController {
 
     @GetMapping({"/getAdminById/{id}"})
     public ModelAndView getAdministratorById(@PathVariable("id") long id, Model model){
+        validationServices.checkIfNegative(id);
+
         Administrator admin =  administratorServices.getAdministratorById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Administrator not found with id :" + id));
 
@@ -76,6 +81,8 @@ public class AdministratorController {
 
     @GetMapping(path = "/getSalesRepresentativeById/{id}")
     public ModelAndView getSalesRepresentativeByID(@PathVariable("id") long id, Model model){
+        validationServices.checkIfNegative(id);
+
         SalesRepresentative representative = administratorServices.getSalesRepresentativeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sales Representative not found with id :" + id));
 
@@ -88,7 +95,9 @@ public class AdministratorController {
 
     @GetMapping(path = "/getProductById/{id}")
     public ModelAndView getProductById(@PathVariable("id") long id, Model model){
-       Product product = administratorServices.getProductById(id)
+        validationServices.checkIfNegative(id);
+
+        Product product = administratorServices.getProductById(id)
                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + id));
 
         model.addAttribute("product",product);
@@ -100,6 +109,8 @@ public class AdministratorController {
 
     @GetMapping(path = "/getSaleById/{id}")
     public ModelAndView getSaleById(@PathVariable("id") long id,Model model){
+        validationServices.checkIfNegative(id);
+
         Sale sale =  administratorServices.getSaleById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found with id :" + id));
 
@@ -112,19 +123,17 @@ public class AdministratorController {
 
     @GetMapping(path = "/getSaleByRepresentativeId/{id}")
     public ModelAndView getSaleByRepresentativeId(@PathVariable("id") long id, Model model){
+        validationServices.checkIfNegative(id);
+
         List<Sale> sale = administratorServices.getSalesByRepresentativeId(id);
-        if(sale.size()==0){
-            throw  new ResourceNotFoundException("Sale not found with id :" + id);
-        }
+        validationServices.checkIfListSizeIsZero(sale.size(),"Sale not found");
 
         Map<String, Integer> graphData = chartService.getStatisticsByRepresentativeId(id);
-        if(graphData.size()==0){
-            throw  new ResourceNotFoundException("No data");
-        }
+        validationServices.checkIfListSizeIsZero(graphData.size(),"No data");
+
         double sumOfAllSales = statsServices.getAllMoney(sale);
-        if(sumOfAllSales<=0){
-            throw  new ResourceNotFoundException("There are no sales so income is 0");
-        }
+        validationServices.checkIfListSizeIsZero((int)sumOfAllSales,"There are no sales so income is 0");
+
         Sale bestSale = statsServices.bestSale(sale);
         if(bestSale==null){
             throw  new ResourceNotFoundException("Sale not found");
@@ -141,18 +150,18 @@ public class AdministratorController {
 
     @GetMapping(path = "/getSaleBetweenPeriod/{first}/{second}")
     public ModelAndView getSaleBetweenPeriod(@PathVariable("first") String firstDate, @PathVariable("second") String secondDate, Model model){
+        validationServices.checkIfStringIsEmpty(firstDate);
+        validationServices.checkIfStringIsEmpty(secondDate);
+
         List<Sale> sale = administratorServices.getSalesBetweenPeriod(firstDate,secondDate);
-        if(sale.size()==0){
-            throw  new ResourceNotFoundException("Sale not found");
-        }
+        validationServices.checkIfListSizeIsZero(sale.size(),"Sale not found");
+
         Map<String, Integer> graphData = chartService.getStatisticsForPeriod(firstDate, secondDate);
-        if(graphData.size()==0){
-            throw  new ResourceNotFoundException("No data");
-        }
+        validationServices.checkIfListSizeIsZero(graphData.size(),"No data");
+
         double sumOfAllSales = statsServices.getAllMoney(sale);
-        if(sumOfAllSales<=0){
-            throw  new ResourceNotFoundException("There are no sales so income is 0");
-        }
+        validationServices.checkIfListSizeIsZero((int)sumOfAllSales,"There are no sales so income is 0");
+
         Sale bestSale = statsServices.bestSale(sale);
         if(bestSale==null){
             throw  new ResourceNotFoundException("Sale not found");
@@ -169,19 +178,17 @@ public class AdministratorController {
 
     @GetMapping(path = "/getSalesOfClient/{name}")
     public ModelAndView getSalesOfClient(@PathVariable("name") String name,Model model){
+        validationServices.checkIfStringIsEmpty(name);
+
         List<Sale> sales = administratorServices.getClientSales(name);
-        if(sales.size()==0){
-            throw  new ResourceNotFoundException("Sale not found");
-        }
+        validationServices.checkIfListSizeIsZero(sales.size(),"Sale not found");
+
         Map<String, Integer> graphData = chartService.getStatisticsByNameOfClient(name);
-        if(graphData.size()==0){
-            throw  new ResourceNotFoundException("No data");
-        }
+        validationServices.checkIfListSizeIsZero(graphData.size(),"No data");
 
         double sumOfAllSales = statsServices.getAllMoney(sales);
-        if(sumOfAllSales<=0){
-            throw  new ResourceNotFoundException("There are no sales so income is 0");
-        }
+        validationServices.checkIfListSizeIsZero((int)sumOfAllSales,"There are no sales so income is 0");
+
         Sale bestSale = statsServices.bestSale(sales);
         if(bestSale==null){
             throw  new ResourceNotFoundException("Sale not found");
@@ -199,9 +206,8 @@ public class AdministratorController {
     @GetMapping("/allSalesRepresentatives")
     public ModelAndView getAllSalesRepresentative(Model model) {
         List<SalesRepresentative> representatives = this.administratorServices.getAllSalesRepresentative();
-        if(representatives.size()==0){
-            throw  new ResourceNotFoundException("Sales Representative not found");
-        }
+        validationServices.checkIfListSizeIsZero(representatives.size(),"Sales Representatives not found");
+
         model.addAttribute("representative",representatives);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/representatives");
@@ -212,9 +218,8 @@ public class AdministratorController {
     @GetMapping({"/allAdmins"})
     public ModelAndView getAllAdministrators(Model model) {
         List<Administrator> administrators = this.administratorServices.getAllAdministrators();
-        if(administrators.size()==0){
-            throw  new ResourceNotFoundException("Administrator not found");
-        }
+        validationServices.checkIfListSizeIsZero(administrators.size(),"Administrators not found");
+
         model.addAttribute("admin",administrators);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/administrators");
@@ -225,9 +230,8 @@ public class AdministratorController {
     @GetMapping({"/allProducts"})
     public ModelAndView getAllProducts(Model model) {
         List<Product> products = this.administratorServices.getAllProduct();
-        if(products.size()==0){
-            throw  new ResourceNotFoundException("Product not found");
-        }
+        validationServices.checkIfListSizeIsZero(products.size(),"Products not found");
+
         model.addAttribute("product",products);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/products");
@@ -238,18 +242,14 @@ public class AdministratorController {
     @GetMapping("/allSales")
     public ModelAndView getAllSales(Model model){
         List<Sale> sales = this.administratorServices.getAllSales();
-        if(sales.size()==0){
-            throw  new ResourceNotFoundException("Sale not found");
-        }
+        validationServices.checkIfListSizeIsZero(sales.size(),"Sales not found");
+
         Map<String, Integer> graphData = chartService.getStatisticsForAllSales();
-        if(graphData.size()==0){
-            throw  new ResourceNotFoundException("No data");
-        }
+        validationServices.checkIfListSizeIsZero(graphData.size(),"No data");
 
         double sumOfAllSales = statsServices.getAllMoney(sales);
-        if(sumOfAllSales<=0){
-            throw  new ResourceNotFoundException("There are no sales so income is 0");
-        }
+        validationServices.checkIfListSizeIsZero((int)sumOfAllSales,"There are no sales so income is 0");
+
         Sale bestSale = statsServices.bestSale(sales);
         if(bestSale==null){
             throw  new ResourceNotFoundException("Sale not found");
@@ -266,6 +266,8 @@ public class AdministratorController {
 
     @RequestMapping(value="/deleteSalesRepresentative/{id}", method={RequestMethod.DELETE, RequestMethod.GET})
     public ModelAndView deleteSalesRepresentativeById(@PathVariable("id") long id){
+        validationServices.checkIfNegative(id);
+
         SalesRepresentative salesRepresentative = administratorServices.getSalesRepresentativeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sales Representative not found with id :" + id));;
         administratorServices.deleteSalesRepresentative(id);
@@ -277,6 +279,8 @@ public class AdministratorController {
 
     @RequestMapping(value="/deleteProduct/{id}", method={RequestMethod.DELETE, RequestMethod.GET})
     public ModelAndView deleteProductById(@PathVariable("id") long id){
+        validationServices.checkIfNegative(id);
+
         Product product = administratorServices.getProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + id));
         administratorServices.deleteProduct(id);
@@ -288,6 +292,7 @@ public class AdministratorController {
 
     @RequestMapping(value = "/updateSalesRepresentative",method =RequestMethod.POST)
     public ModelAndView updateSalesRepresentativeById(@RequestParam("id") long id,@RequestParam("name") String name, @RequestParam("password") String password, @RequestParam("mail") String mail){
+
         SalesRepresentative salesRepresentative = administratorServices.getSalesRepresentativeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sales Representative not found with id :" + id));
         administratorServices.updateSalesRepresentative(id,new SalesRepresentative(name,password, mail));
@@ -299,6 +304,7 @@ public class AdministratorController {
 
     @RequestMapping(value = "/updateProduct",method =RequestMethod.POST)
     public ModelAndView updateProductById(@RequestParam("id") long id , @RequestParam("name") String name, @RequestParam("price") double price, @RequestParam("quantity") int quantity, @RequestParam("description") String description){
+
         Product product = administratorServices.getProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + id));
         administratorServices.updateProduct(id, new Product(name,price,quantity,description));
@@ -307,6 +313,4 @@ public class AdministratorController {
 
         return modelAndView;
     }
-
-
 }

@@ -20,42 +20,68 @@
             }
         </style>
     <script>
+       function required(text){
+         if (text.length == 0)
+          {
+             alert("Empty input field");
+             return false;
+          }
+          return true;
+       }
         function getAdminById() {
             var x = document.getElementById("adminId").value;
-            window.location.href = "/admin/api/v1/getAdminById/" + x;
+            if(required(x)){
+               window.location.href = "/admin/api/v1/getAdminById/" + x;
+            }
         };
          function getRepresentativeById() {
             var x = document.getElementById("representativeId").value;
-            window.location.href = "/admin/api/v1/getSalesRepresentativeById/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/getSalesRepresentativeById/" + x;
+            }
         };
         function getProductById() {
             var x = document.getElementById("productId").value;
-            window.location.href = "/admin/api/v1/getProductById/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/getProductById/" + x;
+            }
         };
         function getSaleById() {
             var x = document.getElementById("saleId").value;
-            window.location.href = "/admin/api/v1/getSaleById/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/getSaleById/" + x;
+            }
         };
         function getSaleByDate() {
             var x = document.getElementById("date1").value;
             var y = document.getElementById("date2").value;
-            window.location.href = "/admin/api/v1/getSaleBetweenPeriod/" + x + "/" + y;
+            if(required(x) && required(y)){
+              window.location.href = "/admin/api/v1/getSaleBetweenPeriod/" + x + "/" + y;
+            }
         };
         function getSaleByRepresentativeId() {
             var x = document.getElementById("saleRepresentativeId").value;
-            window.location.href = "/admin/api/v1/getSaleByRepresentativeId/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/getSaleByRepresentativeId/" + x;
+            }
         };
         function getClientSales() {
             var x = document.getElementById("clientId").value;
-            window.location.href = "/admin/api/v1/getSalesOfClient/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/getSalesOfClient/" + x;
+            }
         };
         function deleteRepresentativeById() {
             var x = document.getElementById("delRepresentativeId").value;
-            window.location.href = "/admin/api/v1/deleteSalesRepresentative/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/deleteSalesRepresentative/" + x;
+            }
         };
         function deleteProductById() {
             var x = document.getElementById("delProductId").value;
-            window.location.href = "/admin/api/v1/deleteProduct/" + x;
+            if(required(x)){
+              window.location.href = "/admin/api/v1/deleteProduct/" + x;
+            }
         };
     </script>
 </head>
@@ -79,7 +105,7 @@
                             <h3><a th:href="@{v1/newAdmin}">New Admin</a></h3>
                             <h5>
                                 Get Admin by ID: <input type="text" id="adminId">
-                                <button onclick="getAdminById()">Get Admin</button>
+                                <button onclick="getAdminById()" >Get Admin</button>
                             </h5>
                         </div>
                     </div>

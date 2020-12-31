@@ -25,6 +25,9 @@ public class AdministratorDataAccessService implements AdministratorDao {
     @Autowired
     private SaleRepository saleRepository;
 
+    @Autowired
+    private StatisticsRepository statisticsRepository;
+
     public int insertAdministratorDao(long id, @Valid @RequestBody Administrator administrator) {
         adminRepository.save(administrator);
         return 1;
@@ -108,11 +111,15 @@ public class AdministratorDataAccessService implements AdministratorDao {
         List<Product> list = productRepository.findByID(id);
         if(list.size()>0){
             List<Sale> saleList = saleRepository.getAllSalesOfProduct(list.get(0).getName());
+            Statistics statistics = statisticsRepository.findByProduct(list.get(0).getName());
             for(Sale sale: saleList){
                 sale.setId(sale.getId());
                 sale.setProduct(product.getName());
                 saleRepository.save(sale);
             }
+            statistics.setProduct(product.getName());
+            statisticsRepository.save(statistics);
+
             product.setId(id);
             productRepository.save(product);
             return 1;

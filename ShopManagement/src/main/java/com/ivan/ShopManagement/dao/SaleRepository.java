@@ -21,6 +21,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Query(value="SELECT * FROM shop.sales s WHERE s.product =:name",nativeQuery=true)
     public List<Sale> getAllSalesOfProduct(@Param("name") String name);
 
-    @Query(value ="SELECT * FROM shop.sales s WHERE s.date >=:firstDate AND s.date <:secondDate",nativeQuery = true)
+    @Query(value ="SELECT * FROM shop.sales s WHERE s.date >=:firstDate AND s.date <=:secondDate",nativeQuery = true)
     public List<Sale> getAllSalesBetweenPeriod(@Param("firstDate")String firstDate, @Param("secondDate") String secondDate);
 }
